@@ -4,11 +4,19 @@ import logging
 import json
 from bs4 import BeautifulSoup
 
+# Initialize some variables
+mode = int(input("Please select a mode (say q to quit): "))  # Get the mode
+game_name = ''
+games = []
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+}
+
 # Define functions
 def metacritic():
     # Get the webpage
     url = f"https://www.metacritic.com/game/{game_name}/"
-    response = requests.get(url, headers=headers, proxies=proxies)
+    response = requests.get(url, headers=headers)
     html = response.text  # Get the source code of the webpage
     soup = BeautifulSoup(html, "html.parser")  # Parse the webpage
     scores = soup.find("span",{"data-v-4cdca868":True})  # Get all score elements
@@ -19,7 +27,7 @@ def metacritic():
 
 def ign():
     url = f"https://www.ign.com/games/{game_name}/"
-    response = requests.get(url, headers=headers, proxies=proxies)
+    response = requests.get(url, headers=headers)
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     scores = soup.find("figcaption")
@@ -30,7 +38,7 @@ def ign():
 
 def gamespot():
     url = f"https://www.gamespot.com/games/{game_name}/"
-    response = requests.get(url, headers=headers, proxies=proxies)
+    response = requests.get(url, headers=headers)
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     # Find all <span> elements whose 'aria-label' attribute contains 'Review score'
@@ -39,14 +47,6 @@ def gamespot():
         print(f"GameSpot score: {spans.text}")  # Print the score
     else:
         print("No matching score found")
-
-# Initialize some variables
-mode = int(input("Please select a mode (say q to quit): "))  # Get the mode
-game_name = ''
-games = []
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-}
 
 # Load the configuration file
 with open("config.json", "r+") as f:
@@ -87,6 +87,7 @@ with open("config.json","w")as f:  # Update the config file
 if mode == 1:
     while(game_name!='q'):
         game_name = input("Please enter the game name: ")
+        game_name = game_name.lower()
         for i in game_name:
             if i == ' ':
                 game_name = game_name.replace(i, "-")  # Replace spaces with hyphens to prevent errors
@@ -108,7 +109,3 @@ elif mode == 3:
                 print(f"The ranking is {games.index(game_name) + 1}")
             else:
                 print("The game is not in the list")
-
-elif mode == 4:
-    for i in range(len(games)):
-        print(f"{games[i]}")
