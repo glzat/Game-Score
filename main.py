@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 def metacritic():
     # Get the webpage
     url = f"https://www.metacritic.com/game/{game_name}/"
-    response = requests.get(url, headers=headers, proxies=proxies)
+    response = requests.get(url, headers=headers)
     html = response.text  # Get the source code of the webpage
     soup = BeautifulSoup(html, "html.parser")  # Parse the webpage
     scores = soup.find("span",{"data-v-4cdca868":True})  # Get all score elements
@@ -19,7 +19,7 @@ def metacritic():
 
 def ign():
     url = f"https://www.ign.com/games/{game_name}/"
-    response = requests.get(url, headers=headers, proxies=proxies)
+    response = requests.get(url, headers=headers)
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     scores = soup.find("figcaption")
@@ -30,7 +30,7 @@ def ign():
 
 def gamespot():
     url = f"https://www.gamespot.com/games/{game_name}/"
-    response = requests.get(url, headers=headers, proxies=proxies)
+    response = requests.get(url, headers=headers)
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     # Find all <span> elements whose 'aria-label' attribute contains 'Review score'
