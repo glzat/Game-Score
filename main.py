@@ -108,7 +108,3 @@ elif mode == 3:
                 print(f"The ranking is {games.index(game_name) + 1}")
             else:
                 print("The game is not in the list")
-
-elif mode == 4:
-    for i in range(len(games)):
-        print(f"{games[i]}")
